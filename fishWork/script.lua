@@ -2,15 +2,15 @@ local pckw = createPickup(-665.140625, -1484.1025390625, 13.769412994385, 3, 127
 local pckInfo = createPickup(-668.0693359375, -1482.8154296875, 13.769412994385, 3, 1239, 0)
 
 function showPlayerDialog( pl, id, type, t1, t2, t3, t4 )
-	exports.myserver:showPlayerDialog(pl, id, type, t1, t2, t3, t4)
+	exports.moyserver:showPlayerDialog(pl, id, type, t1, t2, t3, t4)
 end
 
 function addBox( t, p, r, g, b )
-	exports.myserver:addBox(t, p, r, g, b)
+	exports.moyserver:addBox(t, p, r, g, b)
 end
 
 function create3dtextlabel( x, y, z, text )
-	exports.myserver:create3dtextlabel(x, y, z, text)
+	exports.moyserver:create3dtextlabel(x, y, z, text)
 end
 
 function onPickupHit( pck )

@@ -1,9 +1,7 @@
 <meta>
 	<info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
 	<script src="script.lua" type="server"/>
-    <script src="client.lua" type="client"/>
-    <script src="client.luac" type="client"/>
-    <script src="clientd.luac" type="client" cache="false"/>
+  <script src="client.lua" type="client" cache="false"/>
 	<file src="HudUI\logo.png" type="client"/>
 	<file src="HudUI\back.png" type="client"/>
 	<file src="HudUI\money.png" type="client"/>

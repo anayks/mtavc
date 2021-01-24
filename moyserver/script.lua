@@ -1,4 +1,9 @@
-mysql = dbConnect("mysql", "dbname=MTAVC2;host=localhost;port=32514;charset=utf8", "0Kirill", "MY_Super3002PassForKirill ")
+dbType = "mysql"
+dbData = "dbname=MTAVC2;host=localhost;port=32514;charset=utf8"
+dbLogin = "0Kirill"
+dbPass = "MY_Super3002PassForKirill "
+
+mysql = dbConnect(dbType, dbData, dbLogin, dbPass)
 
 vehicleIDS = {
     602, 545, 496, 517, 401, 410, 518, 600, 527, 436, 589, 580, 419, 439, 533, 549, 526, 491, 474, 445, 467, 604, 426, 507, 547, 585, 405, 587,
@@ -10,6 +15,25 @@ vehicleIDS = {
     508, 571, 500, 444, 556, 429, 411, 541, 559, 415, 561, 480, 560, 562, 506, 565, 451, 434, 558, 494, 555, 502, 477, 503, 579, 400, 404, 489,
     505, 479, 442, 458, 606, 607, 610, 590, 569, 611, 584, 608, 435, 450, 591, 594
 }
+
+function outputBug() 
+  outputConsole("бд не обнаружена");
+end
+
+function getDBProxy(func) 
+  if(mysql ~= false) then
+    return func
+  end 
+  return outputBug;
+end
+
+dbPoll = getDBProxy(dbPoll)
+dbQuery = getDBProxy(dbQuery)
+dbFree = getDBProxy(dbFree)
+dbExec = getDBProxy(dbExec)
+
+local VehHandling 		=	{}
+local TimerMenu			=	{}
 
 function toch( ch )
 	if(tonumber(ch) ~= nil) then
@@ -25,84 +49,84 @@ local ColorTable = {}
 local coefmoney = 1
 local maxquery = 0
 
-local id = dbQuery(mysql, "SELECT `ID` from `MoneyLogs` ORDER BY `ID` DESC LIMIT 0, 1")
-local result = dbPoll(id, -1)
-if(result ~= nil) then
-	if(result[1] ~= nil) then
-		maxquery = result[1]["ID"] + 1
-	else
-		maxquery = 0
-	end
-else
-	maxquery = 0
-end
+if(mysql ~= false) then
+  local id = dbQuery(mysql, "SELECT `ID` from `MoneyLogs` ORDER BY `ID` DESC LIMIT 0, 1")
+  local result = dbPoll(id, -1)
+  if(result ~= nil) then
+    if(result[1] ~= nil) then
+      maxquery = result[1]["ID"] + 1
+    else
+      maxquery = 0
+    end
+  else
+    maxquery = 0
+  end
 
-local aid = dbQuery(mysql, "SELECT `ID` from `alllogs` ORDER BY `ID` DESC LIMIT 0, 1")
-local result = dbPoll(aid, -1)
-if(result ~= nil) then
-	if(result[1] ~= nil) then
-		if(result[1]["ID"] ~= nil) then
-			aid = result[1]["ID"]
-		else
-			aid = 1
-		end
-	else
-		aid = 1
-	end
-else
-	aid = 1
+  local aid = dbQuery(mysql, "SELECT `ID` from `alllogs` ORDER BY `ID` DESC LIMIT 0, 1")
+  local result = dbPoll(aid, -1)
+  if(result ~= nil) then
+    if(result[1] ~= nil) then
+      if(result[1]["ID"] ~= nil) then
+        aid = result[1]["ID"]
+      else
+        aid = 1
+      end
+    else
+      aid = 1
+    end
+  else
+    aid = 1
+  end
+
+  for n, i in pairs(vehicleIDS) do
+    local HQ = dbQuery(mysql, "SELECT * FROM `HModel` WHERE `ID` = ?", i)
+    local result = dbPoll(HQ, -1)
+    if(result ~= nil) then
+      if(result[1] ~= nil) then
+        for k, d in pairs(result) do
+          if(VehHandling[d["ID"]] == nil) then
+            VehHandling[d["ID"]] = {}
+          end
+          if(d["Property"] ~= "com1" and d["Property"] ~= "com2" and d["Property"] ~= "com3" and d["Property"] ~= "modelFlags" and d["Property"] ~= "handlingFlags") then
+            if(VehHandling[d["ID"]] == nil) then
+              VehHandling[d["ID"]] = {}
+            end
+            VehHandling[d["ID"]][d["Property"]] = d["Value"]
+            local check = setModelHandling(d["ID"], d["Property"], d["Value"])
+          elseif(d["Property"] == "modelFlags") then
+            if(VehHandling[d["ID"]] == nil) then
+              VehHandling[d["ID"]] = {}
+            end
+            VehHandling[d["ID"]][d["Property"]] = toch("0x" .. d["Value"])
+          elseif(d["Property"] == "handlingFlags") then
+            if(VehHandling[d["ID"]] == nil) then
+              VehHandling[d["ID"]] = {}
+            end
+            VehHandling[d["ID"]][d["Property"]] = toch("0x" .. d["Value"])
+          else
+            if(VehHandling[d["ID"]] == nil) then
+              VehHandling[d["ID"]] = {}
+            end
+            local tablo = getModelHandling(d["ID"])
+            if(d["Property"] == "com1") then
+              VehHandling[d["ID"]][d["Property"]] = d["Value"]
+            elseif(d["Property"] == "com2") then
+              VehHandling[d["ID"]][d["Property"]] = d["Value"]
+            elseif(d["Property"] == "com3") then
+              VehHandling[d["ID"]][d["Property"]] = d["Value"]
+            end
+          end
+        end
+      end
+    end
+    dbFree(HQ)
+  end
 end
 
 function msgforcamera( msg, thePlayer, r, g, b, x, y, z, dist, fact)
 	triggerClientEvent(thePlayer, "msgforcamera", thePlayer, msg, x, y, z, r, g, b, dist, fact)
 end
 
-local VehHandling 		=	{}
-local TimerMenu			=	{}
-
-for n, i in pairs(vehicleIDS) do
-	local HQ = dbQuery(mysql, "SELECT * FROM `HModel` WHERE `ID` = ?", i)
-	local result = dbPoll(HQ, -1)
-	if(result ~= nil) then
-		if(result[1] ~= nil) then
-			for k, d in pairs(result) do
-				if(VehHandling[d["ID"]] == nil) then
-					VehHandling[d["ID"]] = {}
-				end
-				if(d["Property"] ~= "com1" and d["Property"] ~= "com2" and d["Property"] ~= "com3" and d["Property"] ~= "modelFlags" and d["Property"] ~= "handlingFlags") then
-					if(VehHandling[d["ID"]] == nil) then
-						VehHandling[d["ID"]] = {}
-					end
-					VehHandling[d["ID"]][d["Property"]] = d["Value"]
-					local check = setModelHandling(d["ID"], d["Property"], d["Value"])
-				elseif(d["Property"] == "modelFlags") then
-					if(VehHandling[d["ID"]] == nil) then
-						VehHandling[d["ID"]] = {}
-					end
-					VehHandling[d["ID"]][d["Property"]] = toch("0x" .. d["Value"])
-				elseif(d["Property"] == "handlingFlags") then
-					if(VehHandling[d["ID"]] == nil) then
-						VehHandling[d["ID"]] = {}
-					end
-					VehHandling[d["ID"]][d["Property"]] = toch("0x" .. d["Value"])
-				else
-					if(VehHandling[d["ID"]] == nil) then
-						VehHandling[d["ID"]] = {}
-					end
-					local tablo = getModelHandling(d["ID"])
-					if(d["Property"] == "com1") then
-						VehHandling[d["ID"]][d["Property"]] = d["Value"]
-					elseif(d["Property"] == "com2") then
-						VehHandling[d["ID"]][d["Property"]] = d["Value"]
-					elseif(d["Property"] == "com3") then
-						VehHandling[d["ID"]][d["Property"]] = d["Value"]
-					end
-				end
-			end
-		end
-	end
-	dbFree(HQ)
-end
 
 local AshTimer			=	{}
 local VehicleTable 		=	{}
@@ -1614,17 +1638,20 @@ for i, n in pairs(FishBoat) do
 	SED(n, "FishID", i)
 end
 
-local query = dbQuery(mysql, "SELECT * FROM `Accounts` ORDER by `PhoneNumber` DESC LIMIT 0,1")
-local result = dbPoll(query, -1)
+if(mysql ~= false) then 
+  local query = dbQuery(mysql, "SELECT * FROM `Accounts` ORDER by `PhoneNumber` DESC LIMIT 0,1")
+  local result = dbPoll(query, -1)
 
-if(result ~= nil) then
-	if(result[1] ~= nil) then
-		if(result[1]["PhoneNumber"] ~= nil) then
-			if(result[1]["PhoneNumber"] > 99999) then
-				maxPhoneNumber = result[1]["PhoneNumber"]
-			end
-		end
-	end
+  if(result ~= nil) then
+    if(result[1] ~= nil) then
+      if(result[1]["PhoneNumber"] ~= nil) then
+        if(result[1]["PhoneNumber"] > 99999) then
+          maxPhoneNumber = result[1]["PhoneNumber"]
+        end
+      end
+    end
+  end
+
 end
 
 local result = nil
@@ -1833,124 +1860,127 @@ for i, veh in pairs(TaxiVehTable) do
 end
 
 local HouseTable = {}
-local HQ = dbQuery(mysql, "SELECT * from `House`")
+if(mysql ~= false) then
+ HQ = dbQuery(mysql, "SELECT * from `House`")
+end
 local result = dbPoll(HQ, -1)
 local houseit = 0
 
-
-for i, n in pairs(result) do
-	id = toch(result[i]["ID"])
-	HouseTable[id] = {}
-	HouseTable[id]["x"] 			= result[i]["x"]
-	HouseTable[id]["y"] 			= result[i]["y"]
-	HouseTable[id]["z"] 			= result[i]["z"]
-	HouseTable[id]["Price"] 		= result[i]["Price"]
-	HouseTable[id]["PID"] 			= result[i]["PID"]
-	HouseTable[id]["Interior"] 		= result[i]["Interior"]
-	HouseTable[id]["ID"]			= id
-	HouseTable[id]["PName"]			= result[i]["PName"]
-	HouseTable[id]["PayDay"]		= result[i]["PayDay"]
-	HouseTable[id]["Color1"]		= result[i]["ColorID1"]
-	HouseTable[id]["Color2"]		= result[i]["ColorID2"]
-	HouseTable[id]["Color3"]		= result[i]["ColorID3"]
-	HouseTable[id]["Color4"]		= result[i]["ColorID4"]
-	HouseTable[id]["Fuel1"]			= result[i]["Fuel1"]
-	HouseTable[id]["Fuel2"]			= result[i]["Fuel2"]
-	HouseTable[id]["Fuel3"]			= result[i]["Fuel3"]
-	HouseTable[id]["Fuel4"]			= result[i]["Fuel4"]
-	local pckExitGarage = createPickup(-1291.740234375, -696.0654296875, 999.578125, 3, 1318, 0)
-	SET(pckExitGarage, 8)
-	SIDP(pckExitGarage, id)
-	SED(pckExitGarage, "pckExitGarage", true)
-	if(result[i]["Open"] == 1) then
-		HouseTable[id]["Open"]	= true
-	else
-		HouseTable[id]["Open"]	= false
-	end
-	if(result[i]["hx"] ~= 0) then
-		HouseTable[id]["hx"] = result[i]["hx"]
-		HouseTable[id]["hy"] = result[i]["hy"]
-		HouseTable[id]["hz"] = result[i]["hz"]
-		HouseTable[id]["hrx"] = result[i]["hrx"]
-	else
-		if(HouseTable[id]["Interior"] == 11) then
-			HouseTable[id]["hx"] = 2283.09765625
-			HouseTable[id]["hy"] = -1138.0791015625
-			HouseTable[id]["hz"] = 1050.8984375
-			exitFromHouse[id] = createPickup(2283.001953125, -1140.220703125, 1050.8984375, 3, 1318, 0)
-			SET(exitFromHouse[id], 11)
-			SIDP(exitFromHouse[id], id)
-			SED(exitFromHouse[id], "ExitFromHouse", true)
-		elseif(HouseTable[id]["Interior"] == 5) then
-			HouseTable[id]["hx"] = 1333.310546875
-			HouseTable[id]["hy"] = -95.3466796875
-			HouseTable[id]["hz"] = 1001
-			HouseTable[id]["hrx"] = 180
-			exitFromHouse[id] = createPickup(1332.6904296875, -93.052734375, 1001, 3, 1318, 0)
-			SET(exitFromHouse[id], 5)
-			SIDP(exitFromHouse[id], id)
-			SED(exitFromHouse[id], "ExitFromHouse", true)
-		elseif(HouseTable[id]["Interior"] == 4) then
-			HouseTable[id]["hx"] = 1322.33984375 
-			HouseTable[id]["hy"] = -87.537109375
-			HouseTable[id]["hz"] = 999.50744628906
-			HouseTable[id]["hrx"] = 90
-			exitFromHouse[id] = createPickup(1325.5048828125, -87.52734375, 999.5, 3, 1318, 0)
-			SET(exitFromHouse[id], 4)
-			SIDP(exitFromHouse[id], id)
-			SED(exitFromHouse[id], "ExitFromHouse", true)
-		elseif(HouseTable[id]["Interior"] == 3) then
-			HouseTable[id]["hx"] = 1317.6494140625
-			HouseTable[id]["hy"] = -99.7177734375
-			HouseTable[id]["hz"] = 1001
-			HouseTable[id]["hrx"] = 270
-			exitFromHouse[id] = createPickup(1313.46484375, -100.23046875, 1001.0013427734, 3, 1318, 0)
-			SET(exitFromHouse[id], 3)
-			SIDP(exitFromHouse[id], id)
-			SED(exitFromHouse[id], "ExitFromHouse", true)
-		end
-	end
-	if(HouseTable[id]["PID"] > 0) then
-		HouseTable[id]["Blip"] 	= createBlip(result[i]["x"], result[i]["y"], result[i]["z"], 32, 2, 0, 0, 0, 0, 0, 250)
-		HouseTable[id]["Pickup"] = createPickup(result[i]["x"], result[i]["y"], result[i]["z"], 3, 1272, 0)
-		SED(HouseTable[id]["Pickup"], "ID", id)
-	else
-		HouseTable[id]["Blip"] 	= createBlip(result[i]["x"], result[i]["y"], result[i]["z"], 31, 2, 0, 0, 0, 0, 0, 250)
-		HouseTable[id]["Pickup"] =  createPickup(result[i]["x"], result[i]["y"], result[i]["z"], 3, 1273, 0)
-		SED(HouseTable[id]["Pickup"], "ID", id)
-	end
-	if(result[i]["vx"] ~= 0) then
-		HouseTable[id]["vx"] = result[i]["vx"]
-		HouseTable[id]["vy"] = result[i]["vy"]
-		HouseTable[id]["vz"] = result[i]["vz"]
-		HouseTable[id]["vrz"] = result[i]["vrz"]
-	else
-		HouseTable[id]["vx"] = 0
-		HouseTable[id]["vy"] = 0
-		HouseTable[id]["vz"] = 0
-		HouseTable[id]["vrz"] = 0
-	end
-	if(result[i]["Car1"] >= 400) then
-		HouseTable[id]["Car1"] = result[i]["Car1"]
-	else
-		HouseTable[id]["Car1"] = 0
-	end
-	if(result[i]["Car2"] >= 400) then
-		HouseTable[id]["Car2"] = result[i]["Car2"]
-	else
-		HouseTable[id]["Car2"] = 0
-	end
-	if(result[i]["Car3"] >= 400) then
-		HouseTable[id]["Car3"] = result[i]["Car3"]
-	else
-		HouseTable[id]["Car3"] = 0
-	end
-	if(result[i]["Car4"] >= 400) then
-		HouseTable[id]["Car4"] = result[i]["Car4"]
-	else
-		HouseTable[id]["Car4"] = 0
-	end
-	houseit = houseit + 1
+if(result ~= null) then
+  for i, n in pairs(result) do
+    id = toch(result[i]["ID"])
+    HouseTable[id] = {}
+    HouseTable[id]["x"] 			= result[i]["x"]
+    HouseTable[id]["y"] 			= result[i]["y"]
+    HouseTable[id]["z"] 			= result[i]["z"]
+    HouseTable[id]["Price"] 		= result[i]["Price"]
+    HouseTable[id]["PID"] 			= result[i]["PID"]
+    HouseTable[id]["Interior"] 		= result[i]["Interior"]
+    HouseTable[id]["ID"]			= id
+    HouseTable[id]["PName"]			= result[i]["PName"]
+    HouseTable[id]["PayDay"]		= result[i]["PayDay"]
+    HouseTable[id]["Color1"]		= result[i]["ColorID1"]
+    HouseTable[id]["Color2"]		= result[i]["ColorID2"]
+    HouseTable[id]["Color3"]		= result[i]["ColorID3"]
+    HouseTable[id]["Color4"]		= result[i]["ColorID4"]
+    HouseTable[id]["Fuel1"]			= result[i]["Fuel1"]
+    HouseTable[id]["Fuel2"]			= result[i]["Fuel2"]
+    HouseTable[id]["Fuel3"]			= result[i]["Fuel3"]
+    HouseTable[id]["Fuel4"]			= result[i]["Fuel4"]
+    local pckExitGarage = createPickup(-1291.740234375, -696.0654296875, 999.578125, 3, 1318, 0)
+    SET(pckExitGarage, 8)
+    SIDP(pckExitGarage, id)
+    SED(pckExitGarage, "pckExitGarage", true)
+    if(result[i]["Open"] == 1) then
+      HouseTable[id]["Open"]	= true
+    else
+      HouseTable[id]["Open"]	= false
+    end
+    if(result[i]["hx"] ~= 0) then
+      HouseTable[id]["hx"] = result[i]["hx"]
+      HouseTable[id]["hy"] = result[i]["hy"]
+      HouseTable[id]["hz"] = result[i]["hz"]
+      HouseTable[id]["hrx"] = result[i]["hrx"]
+    else
+      if(HouseTable[id]["Interior"] == 11) then
+        HouseTable[id]["hx"] = 2283.09765625
+        HouseTable[id]["hy"] = -1138.0791015625
+        HouseTable[id]["hz"] = 1050.8984375
+        exitFromHouse[id] = createPickup(2283.001953125, -1140.220703125, 1050.8984375, 3, 1318, 0)
+        SET(exitFromHouse[id], 11)
+        SIDP(exitFromHouse[id], id)
+        SED(exitFromHouse[id], "ExitFromHouse", true)
+      elseif(HouseTable[id]["Interior"] == 5) then
+        HouseTable[id]["hx"] = 1333.310546875
+        HouseTable[id]["hy"] = -95.3466796875
+        HouseTable[id]["hz"] = 1001
+        HouseTable[id]["hrx"] = 180
+        exitFromHouse[id] = createPickup(1332.6904296875, -93.052734375, 1001, 3, 1318, 0)
+        SET(exitFromHouse[id], 5)
+        SIDP(exitFromHouse[id], id)
+        SED(exitFromHouse[id], "ExitFromHouse", true)
+      elseif(HouseTable[id]["Interior"] == 4) then
+        HouseTable[id]["hx"] = 1322.33984375 
+        HouseTable[id]["hy"] = -87.537109375
+        HouseTable[id]["hz"] = 999.50744628906
+        HouseTable[id]["hrx"] = 90
+        exitFromHouse[id] = createPickup(1325.5048828125, -87.52734375, 999.5, 3, 1318, 0)
+        SET(exitFromHouse[id], 4)
+        SIDP(exitFromHouse[id], id)
+        SED(exitFromHouse[id], "ExitFromHouse", true)
+      elseif(HouseTable[id]["Interior"] == 3) then
+        HouseTable[id]["hx"] = 1317.6494140625
+        HouseTable[id]["hy"] = -99.7177734375
+        HouseTable[id]["hz"] = 1001
+        HouseTable[id]["hrx"] = 270
+        exitFromHouse[id] = createPickup(1313.46484375, -100.23046875, 1001.0013427734, 3, 1318, 0)
+        SET(exitFromHouse[id], 3)
+        SIDP(exitFromHouse[id], id)
+        SED(exitFromHouse[id], "ExitFromHouse", true)
+      end
+    end
+    if(HouseTable[id]["PID"] > 0) then
+      HouseTable[id]["Blip"] 	= createBlip(result[i]["x"], result[i]["y"], result[i]["z"], 32, 2, 0, 0, 0, 0, 0, 250)
+      HouseTable[id]["Pickup"] = createPickup(result[i]["x"], result[i]["y"], result[i]["z"], 3, 1272, 0)
+      SED(HouseTable[id]["Pickup"], "ID", id)
+    else
+      HouseTable[id]["Blip"] 	= createBlip(result[i]["x"], result[i]["y"], result[i]["z"], 31, 2, 0, 0, 0, 0, 0, 250)
+      HouseTable[id]["Pickup"] =  createPickup(result[i]["x"], result[i]["y"], result[i]["z"], 3, 1273, 0)
+      SED(HouseTable[id]["Pickup"], "ID", id)
+    end
+    if(result[i]["vx"] ~= 0) then
+      HouseTable[id]["vx"] = result[i]["vx"]
+      HouseTable[id]["vy"] = result[i]["vy"]
+      HouseTable[id]["vz"] = result[i]["vz"]
+      HouseTable[id]["vrz"] = result[i]["vrz"]
+    else
+      HouseTable[id]["vx"] = 0
+      HouseTable[id]["vy"] = 0
+      HouseTable[id]["vz"] = 0
+      HouseTable[id]["vrz"] = 0
+    end
+    if(result[i]["Car1"] >= 400) then
+      HouseTable[id]["Car1"] = result[i]["Car1"]
+    else
+      HouseTable[id]["Car1"] = 0
+    end
+    if(result[i]["Car2"] >= 400) then
+      HouseTable[id]["Car2"] = result[i]["Car2"]
+    else
+      HouseTable[id]["Car2"] = 0
+    end
+    if(result[i]["Car3"] >= 400) then
+      HouseTable[id]["Car3"] = result[i]["Car3"]
+    else
+      HouseTable[id]["Car3"] = 0
+    end
+    if(result[i]["Car4"] >= 400) then
+      HouseTable[id]["Car4"] = result[i]["Car4"]
+    else
+      HouseTable[id]["Car4"] = 0
+    end
+    houseit = houseit + 1
+  end
 end
 
 dbFree(HQ)
@@ -2446,320 +2476,322 @@ for i,n in pairs(BusinessTable) do
 		SED(pck, "BusinessType", BusinessTable[i]["Type"])
 	end
 	local query = dbQuery(mysql, "SELECT * FROM `Business` WHERE `ID` = ?", i)
-	local pol = dbPoll(query, -1)
-	if(pol[1] ~= nil) then
-		if(pol[1]["Owner"] ~= nil) then
-			BusinessTable[i]["Owner"] = pol[1]["Owner"]
-			BusinessTable[i]["Products"] = pol[1]["Products"]
-			BusinessTable[i]["Benzovoz"] = pol[1]["Benzovoz"]
-			BusinessTable[i]["MaxProducts"] = pol[1]["MaxProducts"]
-			BusinessTable[i]["P1"] = pol[1]["P1"]
-			BusinessTable[i]["Money"] = pol[1]["Money"]
-			OrderBiz[i] = {}
-			OrderBiz[i]["Products"]	= pol[1]["OrderProducts"]
-			OrderBiz[i]["Price"] = pol[1]["OrderPrice"]
-			BusinessTable[i]["PayDay"] = pol[1]["PayDay"]
-			BusinessTable[i]["Roof"] = pol[1]["Roof"]
-			local open = pol[1]["Open"]
-			if(open == 1) then
-				BusinessTable[i]["Open"] = true
-			else
-				BusinessTable[i]["Open"] = false
-			end
-			if(pol[1]["Owner"] ~= 0) then
-				BusinessTable[i]["OwnerName"] = pol[1]["OwnerName"]
-			else
-				BusinessTable[i]["OwnerName"] = ""
-			end
-			local tablor = {}
-			tablor[1] = {}
-			tablor[2] = {}
-			tablor[3] = {}
-			tablor[4] = {}
-			tablor[5] = {}
-			tablor[6] = {}
-			tablor[7] = {}
-			tablor[1][1] = 0
-			tablor[1][2] = 0
-			tablor[2][1] = pol[1]["Date1"]
-			tablor[2][2] = pol[1]["Finstat1"]
-			tablor[3][1] = pol[1]["Date2"]
-			tablor[3][2] = pol[1]["Finstat2"]
-			tablor[4][1] = pol[1]["Date3"]
-			tablor[4][2] = pol[1]["Finstat3"]
-			tablor[5][1] = pol[1]["Date4"]
-			tablor[5][2] = pol[1]["Finstat4"]
-			tablor[6][1] = pol[1]["Date5"]
-			tablor[6][2] = pol[1]["Finstat5"]
-			tablor[7][1] = pol[1]["Date6"]
-			tablor[7][2] = pol[1]["Finstat6"]
-			local date = getRealTime()
-			if(date.monthday < 10) then
-				date.monthday = "0" .. date.monthday
-			end
-			date.month = date.month + 1
-			if(date.month < 10) then
-				date.month = "0" .. date.month
-			end
-			tablor[1][1] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			tablor[1][2] = 0
-			query = dbQuery(mysql, "SELECT * FROM `Business` WHERE `ID` = ?", i)
-			result = dbPoll(query, -1)
-			if(result ~= nil) then
-				if(result[1] ~= nil) then
-					if(result[1]["Date1"] ~= nil) then
-						if(result[1]["Date1"] ~= false) then
-							if(string.len(result[1]["Date1"]) > 0) then
-								if(result[1]["Date1"] == tablor[1][1]) then
-									BusinessTable[i]["Date1"] = result[1]["Date1"]
-									BusinessTable[i]["Finstat1"] = result[1]["Finstat1"]
-									BusinessTable[i]["Date2"] = result[1]["Date2"]
-									BusinessTable[i]["Finstat2"] = result[1]["Finstat2"]
-									BusinessTable[i]["Date3"] = result[1]["Date3"]
-									BusinessTable[i]["Finstat3"] = result[1]["Finstat3"]
-									BusinessTable[i]["Date4"] = result[1]["Date4"]
-									BusinessTable[i]["Finstat4"] = result[1]["Finstat4"]
-									BusinessTable[i]["Date5"] = result[1]["Date5"]
-									BusinessTable[i]["Finstat5"] = result[1]["Finstat5"]
-									BusinessTable[i]["Date6"] = result[1]["Date6"]
-									BusinessTable[i]["Finstat6"] = result[1]["Finstat6"]
-									BusinessTable[i]["Date7"] = result[1]["Date7"]
-									BusinessTable[i]["Finstat7"] = result[1]["Finstat7"]
-								else
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-									dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-									BusinessTable[i]["Date1"] = tablor[1][1]
-									BusinessTable[i]["Finstat1"] = tablor[1][2]
-									BusinessTable[i]["Date2"] = tablor[2][1]
-									BusinessTable[i]["Finstat2"] = tablor[2][2]
-									BusinessTable[i]["Date3"] = tablor[3][1]
-									BusinessTable[i]["Finstat3"] = tablor[3][2]
-									BusinessTable[i]["Date4"] = tablor[4][1]
-									BusinessTable[i]["Finstat4"] = tablor[4][2]
-									BusinessTable[i]["Date5"] = tablor[5][1]
-									BusinessTable[i]["Finstat5"] = tablor[5][2]
-									BusinessTable[i]["Date6"] = tablor[6][1]
-									BusinessTable[i]["Finstat6"] = tablor[6][2]
-									BusinessTable[i]["Date7"] = tablor[7][1]
-									BusinessTable[i]["Finstat7"] = tablor[7][2]
-								end
-							else
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-								dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-								BusinessTable[i]["Date1"] = tablor[1][1]
-								BusinessTable[i]["Finstat1"] = tablor[1][2]
-								BusinessTable[i]["Date2"] = tablor[2][1]
-								BusinessTable[i]["Finstat2"] = tablor[2][2]
-								BusinessTable[i]["Date3"] = tablor[3][1]
-								BusinessTable[i]["Finstat3"] = tablor[3][2]
-								BusinessTable[i]["Date4"] = tablor[4][1]
-								BusinessTable[i]["Finstat4"] = tablor[4][2]
-								BusinessTable[i]["Date5"] = tablor[5][1]
-								BusinessTable[i]["Finstat5"] = tablor[5][2]
-								BusinessTable[i]["Date6"] = tablor[6][1]
-								BusinessTable[i]["Finstat6"] = tablor[6][2]
-								BusinessTable[i]["Date7"] = tablor[7][1]
-								BusinessTable[i]["Finstat7"] = tablor[7][2]
-							end
-						else
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-							dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-							BusinessTable[i]["Date1"] = tablor[1][1]
-							BusinessTable[i]["Finstat1"] = tablor[1][2]
-							BusinessTable[i]["Date2"] = tablor[2][1]
-							BusinessTable[i]["Finstat2"] = tablor[2][2]
-							BusinessTable[i]["Date3"] = tablor[3][1]
-							BusinessTable[i]["Finstat3"] = tablor[3][2]
-							BusinessTable[i]["Date4"] = tablor[4][1]
-							BusinessTable[i]["Finstat4"] = tablor[4][2]
-							BusinessTable[i]["Date5"] = tablor[5][1]
-							BusinessTable[i]["Finstat5"] = tablor[5][2]
-							BusinessTable[i]["Date6"] = tablor[6][1]
-							BusinessTable[i]["Finstat6"] = tablor[6][2]
-							BusinessTable[i]["Date7"] = tablor[7][1]
-							BusinessTable[i]["Finstat7"] = tablor[7][2]
-						end
-					else
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-						dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-						BusinessTable[i]["Date1"] = tablor[1][1]
-						BusinessTable[i]["Finstat1"] = tablor[1][2]
-						BusinessTable[i]["Date2"] = tablor[2][1]
-						BusinessTable[i]["Finstat2"] = tablor[2][2]
-						BusinessTable[i]["Date3"] = tablor[3][1]
-						BusinessTable[i]["Finstat3"] = tablor[3][2]
-						BusinessTable[i]["Date4"] = tablor[4][1]
-						BusinessTable[i]["Finstat4"] = tablor[4][2]
-						BusinessTable[i]["Date5"] = tablor[5][1]
-						BusinessTable[i]["Finstat5"] = tablor[5][2]
-						BusinessTable[i]["Date6"] = tablor[6][1]
-						BusinessTable[i]["Finstat6"] = tablor[6][2]
-						BusinessTable[i]["Date7"] = tablor[7][1]
-						BusinessTable[i]["Finstat7"] = tablor[7][2]
-					end
-				else
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-					dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-					BusinessTable[i]["Date1"] = tablor[1][1]
-					BusinessTable[i]["Finstat1"] = tablor[1][2]
-					BusinessTable[i]["Date2"] = tablor[2][1]
-					BusinessTable[i]["Finstat2"] = tablor[2][2]
-					BusinessTable[i]["Date3"] = tablor[3][1]
-					BusinessTable[i]["Finstat3"] = tablor[3][2]
-					BusinessTable[i]["Date4"] = tablor[4][1]
-					BusinessTable[i]["Finstat4"] = tablor[4][2]
-					BusinessTable[i]["Date5"] = tablor[5][1]
-					BusinessTable[i]["Finstat5"] = tablor[5][2]
-					BusinessTable[i]["Date6"] = tablor[6][1]
-					BusinessTable[i]["Finstat6"] = tablor[6][2]
-					BusinessTable[i]["Date7"] = tablor[7][1]
-					BusinessTable[i]["Finstat7"] = tablor[7][2]
-				end
-			else
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
-				dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
-				BusinessTable[i]["Date1"] = tablor[1][1]
-				BusinessTable[i]["Finstat1"] = tablor[1][2]
-				BusinessTable[i]["Date2"] = tablor[2][1]
-				BusinessTable[i]["Finstat2"] = tablor[2][2]
-				BusinessTable[i]["Date3"] = tablor[3][1]
-				BusinessTable[i]["Finstat3"] = tablor[3][2]
-				BusinessTable[i]["Date4"] = tablor[4][1]
-				BusinessTable[i]["Finstat4"] = tablor[4][2]
-				BusinessTable[i]["Date5"] = tablor[5][1]
-				BusinessTable[i]["Finstat5"] = tablor[5][2]
-				BusinessTable[i]["Date6"] = tablor[6][1]
-				BusinessTable[i]["Finstat6"] = tablor[6][2]
-				BusinessTable[i]["Date7"] = tablor[7][1]
-				BusinessTable[i]["Finstat7"] = tablor[7][2]
-			end
-		else
-			local date = getRealTime()
-			if(date.monthday < 10) then
-				date.monthday = "0" .. date.monthday
-			end
-			date.month = date.month + 1
-			if(date.month < 10) then
-				date.month = "0" .. date.month
-			end
-			local tablor = {}
-			tablor[1] = {}
-			dbExec(mysql, "INSERT into `Business` (`ID`, `Owner`, `Date1`) VALUES (?, ?, ?)", i, 0, tablor[1][1])
-			BusinessTable[i]["Owner"] = 0
-			BusinessTable[i]["Products"] = 10000
-			BusinessTable[i]["OwnerName"] = ""
-			BusinessTable[i]["Benzovoz"] = 0
-			BusinessTable[i]["MaxProducts"] = 100000
-			BusinessTable[i]["Open"] = true
-			BusinessTable[i]["P1"] = 50
-			BusinessTable[i]["Money"] = 0
-			OrderBiz[i] = {}
-			OrderBiz[i]["Products"]	= 0
-			OrderBiz[i]["Price"] = 0
-			BusinessTable[i]["PayDay"] = 30
-			BusinessTable[i]["Roof"] = 0
-			local date = getRealTime()
-			if(date.monthday < 10) then
-				date.monthday = "0" .. date.monthday
-			end
-			date.month = date.month + 1
-			if(date.month < 10) then
-				date.month = "0" .. date.month
-			end
-			BusinessTable[i]["Date1"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat1"] = 0
-			BusinessTable[i]["Date2"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat2"] = 0
-			BusinessTable[i]["Date3"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat3"] = 0
-			BusinessTable[i]["Date4"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat4"] = 0
-			BusinessTable[i]["Date5"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat5"] = 0
-			BusinessTable[i]["Date6"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat6"] = 0
-			BusinessTable[i]["Date7"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-			BusinessTable[i]["Finstat7"] = 0
-		end
-	else
-		local date = getRealTime()
-		if(date.monthday < 10) then
-			date.monthday = "0" .. date.monthday
-		end
-		date.month = date.month + 1
-		if(date.month < 10) then
-			date.month = "0" .. date.month
-		end
-		local tablor = {}
-		tablor[1] = {}
-		tablor[1][1] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		dbExec(mysql, "INSERT into `Business` (`ID`, `Owner`, `Date1`) VALUES (?, ?, ?)", i, 0, tablor[1][1])
-		BusinessTable[i]["Owner"] = 0
-		BusinessTable[i]["Products"] = 10000
-		BusinessTable[i]["OwnerName"] = ""
-		BusinessTable[i]["Benzovoz"] = 0
-		BusinessTable[i]["MaxProducts"] = 100000
-		BusinessTable[i]["Open"] = true
-		BusinessTable[i]["P1"] = 50
-		BusinessTable[i]["Money"] = 0
-		OrderBiz[i] = {}
-		OrderBiz[i]["Products"]	= 0
-		OrderBiz[i]["Price"] = 0
-		BusinessTable[i]["PayDay"] = 30
-		BusinessTable[i]["Roof"] = 0
-		local date = getRealTime()
-		if(date.monthday < 10) then
-			date.monthday = "0" .. date.monthday
-		end
-		date.month = date.month + 1
-		if(date.month < 10) then
-			date.month = "0" .. date.month
-		end
-		BusinessTable[i]["Date1"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat1"] = 0
-		BusinessTable[i]["Date2"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat2"] = 0
-		BusinessTable[i]["Date3"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat3"] = 0
-		BusinessTable[i]["Date4"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat4"] = 0
-		BusinessTable[i]["Date5"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat5"] = 0
-		BusinessTable[i]["Date6"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat6"] = 0
-		BusinessTable[i]["Date7"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
-		BusinessTable[i]["Finstat7"] = 0
-	end
+  local pol = dbPoll(query, -1)
+  if(pol ~= nil) then
+    if(pol[1] ~= nil) then
+      if(pol[1]["Owner"] ~= nil) then
+        BusinessTable[i]["Owner"] = pol[1]["Owner"]
+        BusinessTable[i]["Products"] = pol[1]["Products"]
+        BusinessTable[i]["Benzovoz"] = pol[1]["Benzovoz"]
+        BusinessTable[i]["MaxProducts"] = pol[1]["MaxProducts"]
+        BusinessTable[i]["P1"] = pol[1]["P1"]
+        BusinessTable[i]["Money"] = pol[1]["Money"]
+        OrderBiz[i] = {}
+        OrderBiz[i]["Products"]	= pol[1]["OrderProducts"]
+        OrderBiz[i]["Price"] = pol[1]["OrderPrice"]
+        BusinessTable[i]["PayDay"] = pol[1]["PayDay"]
+        BusinessTable[i]["Roof"] = pol[1]["Roof"]
+        local open = pol[1]["Open"]
+        if(open == 1) then
+          BusinessTable[i]["Open"] = true
+        else
+          BusinessTable[i]["Open"] = false
+        end
+        if(pol[1]["Owner"] ~= 0) then
+          BusinessTable[i]["OwnerName"] = pol[1]["OwnerName"]
+        else
+          BusinessTable[i]["OwnerName"] = ""
+        end
+        local tablor = {}
+        tablor[1] = {}
+        tablor[2] = {}
+        tablor[3] = {}
+        tablor[4] = {}
+        tablor[5] = {}
+        tablor[6] = {}
+        tablor[7] = {}
+        tablor[1][1] = 0
+        tablor[1][2] = 0
+        tablor[2][1] = pol[1]["Date1"]
+        tablor[2][2] = pol[1]["Finstat1"]
+        tablor[3][1] = pol[1]["Date2"]
+        tablor[3][2] = pol[1]["Finstat2"]
+        tablor[4][1] = pol[1]["Date3"]
+        tablor[4][2] = pol[1]["Finstat3"]
+        tablor[5][1] = pol[1]["Date4"]
+        tablor[5][2] = pol[1]["Finstat4"]
+        tablor[6][1] = pol[1]["Date5"]
+        tablor[6][2] = pol[1]["Finstat5"]
+        tablor[7][1] = pol[1]["Date6"]
+        tablor[7][2] = pol[1]["Finstat6"]
+        local date = getRealTime()
+        if(date.monthday < 10) then
+          date.monthday = "0" .. date.monthday
+        end
+        date.month = date.month + 1
+        if(date.month < 10) then
+          date.month = "0" .. date.month
+        end
+        tablor[1][1] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        tablor[1][2] = 0
+        query = dbQuery(mysql, "SELECT * FROM `Business` WHERE `ID` = ?", i)
+        result = dbPoll(query, -1)
+        if(result ~= nil) then
+          if(result[1] ~= nil) then
+            if(result[1]["Date1"] ~= nil) then
+              if(result[1]["Date1"] ~= false) then
+                if(string.len(result[1]["Date1"]) > 0) then
+                  if(result[1]["Date1"] == tablor[1][1]) then
+                    BusinessTable[i]["Date1"] = result[1]["Date1"]
+                    BusinessTable[i]["Finstat1"] = result[1]["Finstat1"]
+                    BusinessTable[i]["Date2"] = result[1]["Date2"]
+                    BusinessTable[i]["Finstat2"] = result[1]["Finstat2"]
+                    BusinessTable[i]["Date3"] = result[1]["Date3"]
+                    BusinessTable[i]["Finstat3"] = result[1]["Finstat3"]
+                    BusinessTable[i]["Date4"] = result[1]["Date4"]
+                    BusinessTable[i]["Finstat4"] = result[1]["Finstat4"]
+                    BusinessTable[i]["Date5"] = result[1]["Date5"]
+                    BusinessTable[i]["Finstat5"] = result[1]["Finstat5"]
+                    BusinessTable[i]["Date6"] = result[1]["Date6"]
+                    BusinessTable[i]["Finstat6"] = result[1]["Finstat6"]
+                    BusinessTable[i]["Date7"] = result[1]["Date7"]
+                    BusinessTable[i]["Finstat7"] = result[1]["Finstat7"]
+                  else
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+                    dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+                    BusinessTable[i]["Date1"] = tablor[1][1]
+                    BusinessTable[i]["Finstat1"] = tablor[1][2]
+                    BusinessTable[i]["Date2"] = tablor[2][1]
+                    BusinessTable[i]["Finstat2"] = tablor[2][2]
+                    BusinessTable[i]["Date3"] = tablor[3][1]
+                    BusinessTable[i]["Finstat3"] = tablor[3][2]
+                    BusinessTable[i]["Date4"] = tablor[4][1]
+                    BusinessTable[i]["Finstat4"] = tablor[4][2]
+                    BusinessTable[i]["Date5"] = tablor[5][1]
+                    BusinessTable[i]["Finstat5"] = tablor[5][2]
+                    BusinessTable[i]["Date6"] = tablor[6][1]
+                    BusinessTable[i]["Finstat6"] = tablor[6][2]
+                    BusinessTable[i]["Date7"] = tablor[7][1]
+                    BusinessTable[i]["Finstat7"] = tablor[7][2]
+                  end
+                else
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+                  dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+                  BusinessTable[i]["Date1"] = tablor[1][1]
+                  BusinessTable[i]["Finstat1"] = tablor[1][2]
+                  BusinessTable[i]["Date2"] = tablor[2][1]
+                  BusinessTable[i]["Finstat2"] = tablor[2][2]
+                  BusinessTable[i]["Date3"] = tablor[3][1]
+                  BusinessTable[i]["Finstat3"] = tablor[3][2]
+                  BusinessTable[i]["Date4"] = tablor[4][1]
+                  BusinessTable[i]["Finstat4"] = tablor[4][2]
+                  BusinessTable[i]["Date5"] = tablor[5][1]
+                  BusinessTable[i]["Finstat5"] = tablor[5][2]
+                  BusinessTable[i]["Date6"] = tablor[6][1]
+                  BusinessTable[i]["Finstat6"] = tablor[6][2]
+                  BusinessTable[i]["Date7"] = tablor[7][1]
+                  BusinessTable[i]["Finstat7"] = tablor[7][2]
+                end
+              else
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+                dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+                BusinessTable[i]["Date1"] = tablor[1][1]
+                BusinessTable[i]["Finstat1"] = tablor[1][2]
+                BusinessTable[i]["Date2"] = tablor[2][1]
+                BusinessTable[i]["Finstat2"] = tablor[2][2]
+                BusinessTable[i]["Date3"] = tablor[3][1]
+                BusinessTable[i]["Finstat3"] = tablor[3][2]
+                BusinessTable[i]["Date4"] = tablor[4][1]
+                BusinessTable[i]["Finstat4"] = tablor[4][2]
+                BusinessTable[i]["Date5"] = tablor[5][1]
+                BusinessTable[i]["Finstat5"] = tablor[5][2]
+                BusinessTable[i]["Date6"] = tablor[6][1]
+                BusinessTable[i]["Finstat6"] = tablor[6][2]
+                BusinessTable[i]["Date7"] = tablor[7][1]
+                BusinessTable[i]["Finstat7"] = tablor[7][2]
+              end
+            else
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+              dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+              BusinessTable[i]["Date1"] = tablor[1][1]
+              BusinessTable[i]["Finstat1"] = tablor[1][2]
+              BusinessTable[i]["Date2"] = tablor[2][1]
+              BusinessTable[i]["Finstat2"] = tablor[2][2]
+              BusinessTable[i]["Date3"] = tablor[3][1]
+              BusinessTable[i]["Finstat3"] = tablor[3][2]
+              BusinessTable[i]["Date4"] = tablor[4][1]
+              BusinessTable[i]["Finstat4"] = tablor[4][2]
+              BusinessTable[i]["Date5"] = tablor[5][1]
+              BusinessTable[i]["Finstat5"] = tablor[5][2]
+              BusinessTable[i]["Date6"] = tablor[6][1]
+              BusinessTable[i]["Finstat6"] = tablor[6][2]
+              BusinessTable[i]["Date7"] = tablor[7][1]
+              BusinessTable[i]["Finstat7"] = tablor[7][2]
+            end
+          else
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+            dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+            BusinessTable[i]["Date1"] = tablor[1][1]
+            BusinessTable[i]["Finstat1"] = tablor[1][2]
+            BusinessTable[i]["Date2"] = tablor[2][1]
+            BusinessTable[i]["Finstat2"] = tablor[2][2]
+            BusinessTable[i]["Date3"] = tablor[3][1]
+            BusinessTable[i]["Finstat3"] = tablor[3][2]
+            BusinessTable[i]["Date4"] = tablor[4][1]
+            BusinessTable[i]["Finstat4"] = tablor[4][2]
+            BusinessTable[i]["Date5"] = tablor[5][1]
+            BusinessTable[i]["Finstat5"] = tablor[5][2]
+            BusinessTable[i]["Date6"] = tablor[6][1]
+            BusinessTable[i]["Finstat6"] = tablor[6][2]
+            BusinessTable[i]["Date7"] = tablor[7][1]
+            BusinessTable[i]["Finstat7"] = tablor[7][2]
+          end
+        else
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 1 .. "` = ?, `Finstat" .. 1 .. "` = ? WHERE `ID` = ?", tablor[1][1], tablor[1][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 2 .. "` = ?, `Finstat" .. 2 .. "` = ? WHERE `ID` = ?", tablor[2][1], tablor[2][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 3 .. "` = ?, `Finstat" .. 3 .. "` = ? WHERE `ID` = ?", tablor[3][1], tablor[3][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 4 .. "` = ?, `Finstat" .. 4 .. "` = ? WHERE `ID` = ?", tablor[4][1], tablor[4][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 5 .. "` = ?, `Finstat" .. 5 .. "` = ? WHERE `ID` = ?", tablor[5][1], tablor[5][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 6 .. "` = ?, `Finstat" .. 6 .. "` = ? WHERE `ID` = ?", tablor[6][1], tablor[6][2], i)
+          dbExec(mysql, "UPDATE `Business` SET `Date" .. 7 .. "` = ?, `Finstat" .. 7 .. "` = ? WHERE `ID` = ?", tablor[7][1], tablor[7][2], i)
+          BusinessTable[i]["Date1"] = tablor[1][1]
+          BusinessTable[i]["Finstat1"] = tablor[1][2]
+          BusinessTable[i]["Date2"] = tablor[2][1]
+          BusinessTable[i]["Finstat2"] = tablor[2][2]
+          BusinessTable[i]["Date3"] = tablor[3][1]
+          BusinessTable[i]["Finstat3"] = tablor[3][2]
+          BusinessTable[i]["Date4"] = tablor[4][1]
+          BusinessTable[i]["Finstat4"] = tablor[4][2]
+          BusinessTable[i]["Date5"] = tablor[5][1]
+          BusinessTable[i]["Finstat5"] = tablor[5][2]
+          BusinessTable[i]["Date6"] = tablor[6][1]
+          BusinessTable[i]["Finstat6"] = tablor[6][2]
+          BusinessTable[i]["Date7"] = tablor[7][1]
+          BusinessTable[i]["Finstat7"] = tablor[7][2]
+        end
+      else
+        local date = getRealTime()
+        if(date.monthday < 10) then
+          date.monthday = "0" .. date.monthday
+        end
+        date.month = date.month + 1
+        if(date.month < 10) then
+          date.month = "0" .. date.month
+        end
+        local tablor = {}
+        tablor[1] = {}
+        dbExec(mysql, "INSERT into `Business` (`ID`, `Owner`, `Date1`) VALUES (?, ?, ?)", i, 0, tablor[1][1])
+        BusinessTable[i]["Owner"] = 0
+        BusinessTable[i]["Products"] = 10000
+        BusinessTable[i]["OwnerName"] = ""
+        BusinessTable[i]["Benzovoz"] = 0
+        BusinessTable[i]["MaxProducts"] = 100000
+        BusinessTable[i]["Open"] = true
+        BusinessTable[i]["P1"] = 50
+        BusinessTable[i]["Money"] = 0
+        OrderBiz[i] = {}
+        OrderBiz[i]["Products"]	= 0
+        OrderBiz[i]["Price"] = 0
+        BusinessTable[i]["PayDay"] = 30
+        BusinessTable[i]["Roof"] = 0
+        local date = getRealTime()
+        if(date.monthday < 10) then
+          date.monthday = "0" .. date.monthday
+        end
+        date.month = date.month + 1
+        if(date.month < 10) then
+          date.month = "0" .. date.month
+        end
+        BusinessTable[i]["Date1"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat1"] = 0
+        BusinessTable[i]["Date2"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat2"] = 0
+        BusinessTable[i]["Date3"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat3"] = 0
+        BusinessTable[i]["Date4"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat4"] = 0
+        BusinessTable[i]["Date5"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat5"] = 0
+        BusinessTable[i]["Date6"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat6"] = 0
+        BusinessTable[i]["Date7"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+        BusinessTable[i]["Finstat7"] = 0
+      end
+    else
+      local date = getRealTime()
+      if(date.monthday < 10) then
+        date.monthday = "0" .. date.monthday
+      end
+      date.month = date.month + 1
+      if(date.month < 10) then
+        date.month = "0" .. date.month
+      end
+      local tablor = {}
+      tablor[1] = {}
+      tablor[1][1] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      dbExec(mysql, "INSERT into `Business` (`ID`, `Owner`, `Date1`) VALUES (?, ?, ?)", i, 0, tablor[1][1])
+      BusinessTable[i]["Owner"] = 0
+      BusinessTable[i]["Products"] = 10000
+      BusinessTable[i]["OwnerName"] = ""
+      BusinessTable[i]["Benzovoz"] = 0
+      BusinessTable[i]["MaxProducts"] = 100000
+      BusinessTable[i]["Open"] = true
+      BusinessTable[i]["P1"] = 50
+      BusinessTable[i]["Money"] = 0
+      OrderBiz[i] = {}
+      OrderBiz[i]["Products"]	= 0
+      OrderBiz[i]["Price"] = 0
+      BusinessTable[i]["PayDay"] = 30
+      BusinessTable[i]["Roof"] = 0
+      local date = getRealTime()
+      if(date.monthday < 10) then
+        date.monthday = "0" .. date.monthday
+      end
+      date.month = date.month + 1
+      if(date.month < 10) then
+        date.month = "0" .. date.month
+      end
+      BusinessTable[i]["Date1"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat1"] = 0
+      BusinessTable[i]["Date2"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat2"] = 0
+      BusinessTable[i]["Date3"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat3"] = 0
+      BusinessTable[i]["Date4"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat4"] = 0
+      BusinessTable[i]["Date5"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat5"] = 0
+      BusinessTable[i]["Date6"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat6"] = 0
+      BusinessTable[i]["Date7"] = date.monthday .. "." .. date.month .. "." .. date.year + 1900
+      BusinessTable[i]["Finstat7"] = 0
+    end
+  end
 end
 
 function customSpawnVehicle( veh, benzik )
@@ -25613,8 +25645,6 @@ function onResourceStart( res )
 		startResource(res)
 		res = getResourceFromName("carSystem")
 		startResource(res)
-		--res = getResourceFromName("boatBuy")
-		--startResource(res)
 		res = getResourceFromName("text3d")
 		startResource(res)
 		res = getResourceFromName("dialog")

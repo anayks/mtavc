@@ -237,8 +237,8 @@ function showPlayerDialog( arg )
 end
 
 function onClientResourceStart( res )
-	if("myserver" == getResourceName(res)) then
-		shr = exports["myserver"]:sendBebas()
+	if("moyserver" == getResourceName(res)) then
+		shr = exports["moyserver"]:sendBebas()
 		razr = true
 		addEventHandler("onClientRender", root, onClientRender)
 	end

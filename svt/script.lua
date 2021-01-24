@@ -67,7 +67,7 @@ end
 setTimer(greenToYellow, 40 * 1000, 1)
 
 function addBox( t, p, r, g, b )
-	exports.myserver:addBox(t, p, r, g, b)
+	exports.moyserver:addBox(t, p, r, g, b)
 end
 
 function checkSvetofor( arg1, arg2 )
@@ -79,10 +79,10 @@ function checkSvetofor( arg1, arg2 )
 						if(getElementData(arg1, "Faction") ~= 8 and getElementData(arg1, "Faction") ~= 7) then
 							local money = tonumber(getElementData(arg1, "Money"))
 							if(money >= 500) then
-								exports.myserver:setElementMoney(arg1, -500, "Штраф")
+								exports.moyserver:setElementMoney(arg1, -500, "Штраф")
 								addBox("Вы были оштрафованы на 500$,\nЗа то, что проехали на красный свет.", arg1, 255, 0, 0)
 							else
-								exports.myserver:setLicFu(arg1)
+								exports.moyserver:setLicFu(arg1)
 								addBox("Вы были лишены возможности\nУправлять автомобилем за\nМногократные нарушения.", arg1, 255, 0, 0)
 							end
 							setElementData(arg1, "Shtraf", 2)
@@ -93,10 +93,10 @@ function checkSvetofor( arg1, arg2 )
 						if(getElementData(arg1, "Faction") ~= 8 and getElementData(arg1, "Faction") ~= 7) then
 							local money = tonumber(getElementData(arg1, "Money"))
 							if(money >= 1000) then
-								exports.myserver:setElementMoney(arg1, -1000, "Штраф")
+								exports.moyserver:setElementMoney(arg1, -1000, "Штраф")
 								addBox("Вы были оштрафованы на 1000$,\nЗа то, что проехали на красный свет.", arg1, 255, 0, 0)
 							else
-								exports.myserver:setLicFu(arg1)
+								exports.moyserver:setLicFu(arg1)
 								addBox("Вы были лишены возможности\nУправлять автомобилем за\nМногократные нарушения.", arg1, 255, 0, 0)
 							end
 						end
@@ -108,10 +108,10 @@ function checkSvetofor( arg1, arg2 )
 						setElementData(arg1, "Shtraf", 1)
 						local money = tonumber(getElementData(arg1, "Money"))
 						if(money >= 250) then
-							exports.myserver:setElementMoney(arg1, -250, "Штраф")
+							exports.moyserver:setElementMoney(arg1, -250, "Штраф")
 							addBox("Вы были оштрафованы на 250$,\nЗа то, что проехали на красный свет.", arg1, 255, 0, 0)
 						else
-							exports.myserver:setLicFu(arg1)
+							exports.moyserver:setLicFu(arg1)
 							addBox("Вы были лишены возможности\nУправлять автомобилем за\nМногократные нарушения.", arg1, 255, 0, 0)
 						end
 					end

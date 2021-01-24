@@ -7,11 +7,11 @@ for i,n in pairs(getElementsByType("player")) do
 end
 
 function attach3dtexttoplayer( text, player, x, y, z )
-	exports.myserver:attach3dtexttoplayer(text, player, x, y, z)
+	exports.moyserver:attach3dtexttoplayer(text, player, x, y, z)
 end
 
 function addBox( text, p, r, g, b )
-	exports["myserver"]:addBox(text, p, r, g, b)
+	exports["moyserver"]:addBox(text, p, r, g, b)
 end
 
 function onPlayerVoiceStart(  )
