@@ -1,0 +1,103 @@
+body {
+	margin: 0;
+	display: flex;
+  	-webkit-user-select: none;
+  	background: #0000;
+}
+
+@font-face {
+    font-family: GraublauWed;
+    src: url("bebas-neue-bold.ttf") format("opentype");
+}
+
+@font-face {
+    font-family: GraublauWedr;
+    src: url("SolomonSansSemiBold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: GraublauWem;
+    src: url("AvertaCyrillicRegular.otf") format("opentype");
+}
+
+
+.block {
+	visibility: hidden;
+	margin: 0 auto;
+	margin-top: 50vh;
+	background: #f1f1f3;
+	border-radius: 15px;
+	transform: translate(0, -50%);
+	min-width: 520px;
+}
+
+.block-name {
+	text-align: center;
+	font-family: GraublauWed;
+	font-size: 32px;
+	color: #666;
+	margin: 10px 20px;
+}
+
+.under-name {
+	background: #f9e;
+	margin: 10px 20px;
+	height: 4px;
+}
+
+.filler-text {
+	justify-content: space-between;
+}
+
+.filler-text-str {
+	margin: 2px 20px;
+	font-family: GraublauWem;
+	font-weight: 900;
+	font-size: 10pt;
+	color: #000;
+}
+
+.inputtext {
+	margin: 10px 2%;
+	width: calc(96% - 24px);
+	background: #ddd;
+	border: 0;
+	border-radius: 5px;
+	height: 35px;
+	padding: 4px 12px;
+	font-family: GraublauWem;
+	font-size: 10pt;
+}
+
+.inputtext:focus {
+	outline: none;
+	border: 2px solid #666;
+	padding: 2px 10px;
+}
+
+.bottom {
+	display: flex;
+	justify-content: space-between;
+	width: 50%;
+	min-width: 260px;
+	margin-left: 25%;
+}
+
+.button {
+	min-width: 120px;
+	width: 30%;
+	text-align: center;
+	border-radius: 8px;
+	line-height: 30px;
+	background: #f8e;
+	color: white;
+	font-family: GraublauWem;
+	height: 35px;
+	margin-bottom: 5px;
+	box-shadow: 0 10px 10px #f8e4;
+}
+
+.button:hover {
+	background: #e7d;
+	box-shadow: 0 10px 10px #e7d4;
+}

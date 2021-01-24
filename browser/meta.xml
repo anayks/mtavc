@@ -1,0 +1,50 @@
+<meta>
+	<info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <script src="script.lua" type="server"/>
+    <file src="html/main.html" type="client" cache="false"/>
+    <file src="html/style.css" type="client" cache="false"/>
+    <file src="html/images/form.png" type="client"/>
+    <file src="html/images/default.png" type="client"/>
+    <file src="html/images/female_no_active.png" type="client"/>
+    <file src="html/images/male_no_active.png" type="client"/>
+    <file src="html/script.js" type="client" cache="false"/>
+    <file src="html/SolomonSansBold.otf" type="client"/>
+    <file src="html/images/male_active.png" type="client"/>
+    <file src="html/images/female_active.png" type="client"/>
+    <file src="html/images/arrow-_active.png" type="client"/>
+    <file src="html/images/-arrow_active.png" type="client"/>
+    <file src="html/images/arrow-_no_active.png" type="client"/>
+    <file src="html/images/-arrow_no_active.png" type="client"/>
+    <file src="regs/main.html" type="client" cache="false"/>
+    <file src="regs/style.css" type="client" cache="false"/>
+    <file src="regs/info-form.png" type="client"/>
+    <file src="regs/bg.jpg" type="client"/>
+    <file src="regs/RAGE.TTF" type="client"/>
+    <file src="regs/SolomonSansBold.otf" type="client"/>
+    <file src="regs/SolomonSansSemiBold.otf" type="client"/>
+    <file src="avt/main.html" type="client" cache="false"/>
+    <file src="avt/style.css" type="client" cache="false"/>
+    <file src="avt/RAGE.TTF" type="client"/>
+    <file src="avt/SolomonSansBold.otf" type="client"/>
+    <file src="avt/SolomonSansSemiBold.otf" type="client"/>
+    <file src="avt/bg.jpg" type="client"/>
+    <file src="avt/script.js" type="client" cache="false"/>
+    <file src="regs/script.js" type="client" cache="false"/>
+    <file src="input/index.html" type="client" cache="false"/>
+    <file src="input/style.css" type="client" cache="false"/>
+    <file src="input/SolomonSansBold.otf" type="client"/>
+    <file src="input/SolomonSansSemiBold.otf" type="client"/>
+    <file src="input/bebas-neue-bold.ttf" type="client"/>
+    <file src="input/AvertaCyrillicRegular.otf" type="client"/>
+    <file src="input/script.js" type="client" cache="false"/>
+    <file src="eat/index.html" type="client" cache="false"/>
+    <file src="eat/style.css" type="client" cache="false"/>
+    <file src="eat/AvertaCyrillicRegular.otf" type="client"/>
+    <file src="eat/bebas-neue-bold.ttf" type="client"/>
+    <file src="eat/pizza.png" type="client"/>
+    <file src="eat/burger.png" type="client"/>
+    <file src="eat/SolomonSansSemiBold.otf" type="client"/>
+    <file src="eat/script.js" type="client" cache="false"/>
+    <file src="index.html" type="client" cache="false"/>
+</meta>

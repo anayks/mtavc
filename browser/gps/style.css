@@ -1,0 +1,104 @@
+body {
+	background: #fff0;
+	margin: 0;
+}
+
+@font-face {
+    font-family: GraublauWed;
+    src: url("SolomonSansSemiBold.otf") format("opentype");
+}
+
+
+.gps-block {
+	color: white;
+	font-size: 18px;
+	display: block;
+	margin-top: 228px;
+	margin-left: 543px;
+	height: 623px;
+	width: 833px;
+	background: #f30;
+	border-radius: 12px;
+	background: #0000 url("form.png") no-repeat;
+}
+
+body {
+    scrollbar-face-color: #b46868;
+}
+
+.selection {
+	display: block;
+	position: absolute;
+	font-family: GraublauWed;
+	background: #FB7FFC;
+	width: 313px;
+	height: 54px;
+	line-height: 54px;
+	margin-left: 30px;
+	margin-top: 240px;
+	border-radius: 15px;
+	border: 0;
+	outline: none; 
+}
+
+.text-sel {
+	margin-left: 50px;
+}
+
+.block-inline {
+	color: #B1B1B1;
+	font-family: GraublauWed;
+	position: absolute;
+	width: 313px;
+	height: 275px;
+	line-height: 54px;
+	border-radius: 15px;
+	margin-left: 30px;
+	margin-top: 307px;
+	background: white;
+}
+
+.line {
+	position: absolute;
+	height: 20px;
+	font-size: 18px;
+	background: #FB7FFC;
+	width: 60px;
+}
+
+.block-outline {
+	width: 285px;
+	height: 255px;
+	margin-bottom: 14px;
+	margin-left: 14px;
+	overflow-y: scroll;
+	position: absolute;
+}
+
+.force-overflow
+{
+	min-height: 450px;
+}
+
+.block-outline::-webkit-scrollbar-track
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	float: left;
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+.block-outline::-webkit-scrollbar
+{
+	left: 50px;
+	width: 13px;
+	background-color:  #0000;
+	border: solid 20px #fff0;
+}
+
+.block-outline::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	background-color: #FB7FFC;
+}

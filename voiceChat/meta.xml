@@ -1,0 +1,6 @@
+<meta>
+	<info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <script src="script.lua" type="server"/>
+    <file src="icon_voice_chat.png" type="client"/>
+</meta>

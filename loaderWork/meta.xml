@@ -1,0 +1,6 @@
+<meta>
+	<info author="Lemn" type="script" name="MTAVC" description="MTA VC"/>
+	<script src="script.lua" type="server"/>
+	<export function="startWorkingCarLoader" type="server"/>
+	<export function="clearLoaderCar" type="server"/>
+</meta>

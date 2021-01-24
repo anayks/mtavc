@@ -1,0 +1,7 @@
+<meta>
+	<info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
+    <script src="client.lua" type="client" cache="false"/>
+    <file src="MenuUI\Fonts\AvertaCyrillicRegular.otf" type="client" />
+    <file src="png\button_active.png" type="client" />
+    <file src="png\button_no-active.png" type="client" />
+</meta>

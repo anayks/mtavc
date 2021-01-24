@@ -1,0 +1,159 @@
+body {
+	margin: 0;
+	background: #fff url("bg.jpg") no-repeat;
+	-webkit-user-select: none;
+}
+
+@font-face {
+    font-family: GraublauWeb;
+    src: url("RAGE.TTF") format("opentype");
+}
+
+@font-face {
+    font-family: GraublauWed;
+    src: url("SolomonSansBold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: GraublauWedr;
+    src: url("SolomonSansSemiBold.otf") format("opentype");
+}
+
+.rgs {
+	display: flex;
+	width: 1201px;
+	height: 645px;
+	margin-left: 360px;
+	margin-top: 218px;
+	justify-content: space-between;
+}
+
+.back-left {
+	background: #f1f1f3;
+	width: 473px;
+	height: 645px;
+	border-radius: 20px 0 0 20px;
+}
+
+.server-name {
+	width: 100%;
+	height: 40px;
+	margin-left: 50px;
+	margin-top: 35px;
+	justify-content: space-between;
+	font-family: GraublauWeb;
+	font-size: 40px;
+	color: #FB7EFC;
+}
+
+.registr {
+	width: 100%;
+	height: 32px;
+	margin-left: 50px;
+	margin-top: 29px;
+	justify-content: space-between;;
+	font-family: GraublauWed;
+	font-size: 30px;
+	color: #6E6E6E;
+}
+
+.name-block {
+	width: 100%;
+	height: 32px;
+	margin-left: 50px;
+	margin-top: 40px;
+	justify-content: space-between;;
+	font-family: GraublauWedr;
+	font-size: 20px;
+	color: #A4A4A5;
+}
+
+.player-name {
+	width: 100%;
+	height: 32px;
+	margin-left: 50px;
+	margin-top: 12px;
+	justify-content: space-between;;
+	font-family: GraublauWed;
+	font-size: 25px;
+	color: #6E6E6E;
+}
+
+.check-pass {
+	width: 100%;
+	height: 32px;
+	margin-left: 50px;
+	margin-top: 29px;
+	justify-content: space-between;;
+	font-family: GraublauWedr;
+	font-size: 20px;
+	color: #A4A4A5;
+}
+
+.input-pass {
+	width: 336px;
+	height: 27px;
+	border: 0px;
+	border-radius: 5px;
+	margin-left: 49px;
+	margin-top: 16px;
+	background: #E2E2E5;
+	padding: 4px 10px;
+	font-family: GraublauWed;
+	color: #6E6E6E;
+	font-size: 14px;
+}
+
+.input-pass:focus {
+	outline: none;
+	border: 2px solid #6E6E6E;
+	height: 23px;
+	width: 332px;
+	padding: 4px 8px;
+}
+
+.back-right {
+	background: #f1f1f3 url("info-form.png") no-repeat;
+	width: 728px;
+	height: 645px;
+	border-radius: 0 20px 20px 0;
+}
+
+.create-account {
+	margin-top: 64px;
+	margin-left: 49px;
+	width: 245px;
+	height: 66px;
+	color: #fff;
+	font-size: 20px;
+	font-family: GraublauWedr;
+	background: #FB7EFC;
+	border-radius: 15px;
+	text-align: center;
+	line-height: 66px;
+	box-shadow: 0 20px 10px #FB7EFC44;
+}
+
+.create-account:hover {
+	background: #EB6EEC;
+	box-shadow: 0 20px 10px #EB7EEC44;
+}
+
+.right-name {
+	font-family: GraublauWedr;
+	color: #fff;
+	margin-top: 84px;
+	margin-left: 54px;
+	width: 320px;
+	font-size: 35px;
+}
+
+.right-text {
+	text-align: justify;
+	font-family: GraublauWedr;
+	font-size: 20px;
+	color: #fff;
+	margin-left: 54px;
+	margin-top: 45px;
+	width: 620px;
+}

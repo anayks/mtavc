@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>  
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="script.js"></script>
+</head>  
+<body>
+	<div class="hello-back">
+		<div class="hello">
+			<span class="shrift">Создание персонажа</span>
+		</div>
+		<div class="block-name-one">Выберите пол</div>
+		<div class="block-check-pol">
+			<div class="cont" id="malecont" onclick="maleClick()">
+				<div class="content-sex" id="male">
+				</div>
+			</div>
+			<div class="cont" id="femcont" onclick="femClick()">
+				<div class="content-sex" id="fem">
+				</div>
+			</div>
+		</div>
+		<div class="block-check-od">
+			<div class="block-check-od-in">
+				<div id="od1" onclick="leftPerson()">
+					<div id="od1p">
+					</div>
+				</div>
+				<div id="od2">
+					<div id="od2t">
+						ОДЕЖДА
+					</div>
+				</div>
+				<div id="od3" onclick="rightPerson()">
+					<div id="od3p">
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="randomvn">
+			<div class="randomvnin" id="random" onclick="randomVn()">
+				СЛУЧАЙНО
+			</div>
+		</div>
+		<div class="accessskin">
+			<div class="accessskinin" id="accept" onclick="chooseSpawn()">
+				ПОДТВЕРДИТЬ
+			</div>
+		</div>
+	</div>
+</body>  
+</html>
