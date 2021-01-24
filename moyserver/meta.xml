@@ -1,0 +1,226 @@
+<meta>
+	<info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
+	<script src="script.lua" type="server"/>
+    <script src="client.lua" type="client"/>
+    <script src="client.luac" type="client"/>
+    <script src="clientd.luac" type="client" cache="false"/>
+	<file src="HudUI\logo.png" type="client"/>
+	<file src="HudUI\back.png" type="client"/>
+	<file src="HudUI\money.png" type="client"/>
+	<file src="SFUIText-Regular.ttf" type="client" />
+	<file src="SFUIText-Heavy.ttf" type="client" />
+	<file src="log2.ttf" type="client" />
+	<file src="log.ttf" type="client" />
+	<file src="pricedownbl.ttf" type="client" />
+	<file src="LoginUI\0log.png" type="client" />
+	<file src="HudUI\armor.png" type="client"/>
+	<file src="HudUI\zv.png" type="client"/>
+	<file src="HudUI\o2.png" type="client"/>
+	<file src="HudUI\zv2.png" type="client"/>
+	<file src="HudUI\food.png" type="client"/>
+	<file src="SkillsUI\Back.png" type="client"/>
+	<file src="SkillsUI\Exit.png" type="client"/>
+	<file src="RegisterUI\1reg.png" type="client"/>
+	<file src="HudUI\exp.png" type="client"/>
+	<file src="RegisterUI\line.png" type="client"/>
+	<file src="HudUI\health.png" type="client"/>
+	<file src="HudUI\ak47.png" type="client"/>
+	<file src="HudUI\wbox.png" type="client"/>
+	<file src="HudUI\patr.png" type="client"/>
+	<file src="HudUI\deagle.png" type="client"/>
+	<file src="HudUI\m4.png" type="client"/>
+	<file src="HudUI\shotgun.png" type="client"/>
+	<file src="LBack.png" type="client"/>
+	<file src="cherk.png" type="client"/>
+	<file src="forgpass.png" type="client"/>
+	<file src="LoginUI\1log.png" type="client"/>
+	<file src="SpeedUI\Back.png" type="client"/>
+	<file src="SpeedUI\Fuel.png" type="client"/>
+	<file src="SpeedUI\EngOn.png" type="client"/>
+	<file src="SpeedUI\EngOff.png" type="client"/>
+	<file src="SpeedUI\LightsOn.png" type="client"/>
+	<file src="SpeedUI\LightsOff.png" type="client"/>
+	<file src="SpeedUI\VehLock.png" type="client"/>
+	<file src="SpeedUI\VehNotLock.png" type="client"/>
+	<file src="RegisterUI\0.png" type="client"/>
+	<file src="RegisterUI\sex0.png" type="client"/>
+	<file src="RegisterUI\sex1.png" type="client"/>
+	<file src="RegisterUI\sex2.png" type="client"/>
+	<file src="MenuUI\Ava.png" type="client"/>
+	<file src="MenuUI\Choose.png" type="client"/>
+	<file src="MenuUI\MainBack.png" type="client"/>
+	<file src="MenuUI\StatsBack.png" type="client"/>
+	<file src="MenuUI\Faction\Army.png" type="client"/>
+	<file src="MenuUI\Faction\Back.png" type="client"/>
+	<file src="MenuUI\Faction\CityHall.png" type="client"/>
+	<file src="MenuUI\Faction\EMS.png" type="client"/>
+	<file src="MenuUI\Faction\MafColumbian.png" type="client"/>
+	<file src="MenuUI\Faction\MafItalian.png" type="client"/>
+	<file src="MenuUI\Faction\MafMexico.png" type="client"/>
+	<file src="MenuUI\Faction\MafTriada.png" type="client"/>
+	<file src="MenuUI\Faction\Police.png" type="client"/>
+	<file src="MenuUI\Faction\ViceNews.png" type="client"/>
+	<file src="MenuUI\Fonts\AvertaCyrillicRegular.otf" type="client" />
+	<file src="MenuUI\Fonts\AvertaCyrillicLightItalic.otf" type="client" />
+	<file src="MenuUI\Fonts\AvertaCyrillicSemiBold.otf" type="client" />
+	<file src="MenuUI\Fonts\AvertaCyrillicBold.otf" type="client" />
+	<file src="MenuUI\Level\1iz8.png" type="client" />
+	<file src="MenuUI\Level\2iz8.png" type="client" />
+	<file src="MenuUI\Level\3iz8.png" type="client" />
+	<file src="MenuUI\Level\4iz8.png" type="client" />
+	<file src="MenuUI\Level\5iz8.png" type="client" />
+	<file src="MenuUI\Level\6iz8.png" type="client" />
+	<file src="MenuUI\Level\7iz8.png" type="client" />
+	<file src="MenuUI\Level\Back.png" type="client" />
+	<file src="MenuUI\Exit.png" type="client" />
+	<file src="MenuUI\Icons\1.png" type="client" />
+	<file src="MenuUI\Icons\2.png" type="client" />
+	<file src="MenuUI\Icons\3.png" type="client" />
+	<file src="MenuUI\Icons\4.png" type="client" />
+	<file src="MenuUI\Icons\5.png" type="client" />
+	<file src="MenuUI\Icons\6.png" type="client" />
+	<file src="MenuUI\Icons\7.png" type="client" />
+	<file src="MenuUI\Icons\8.png" type="client" />
+	<file src="MenuUI\Report\ReportWindow.png" type="client" />
+	<file src="MenuUI\Report\ReportButton.png" type="client" />
+	<file src="FishUI\Back.png" type="client" />
+	<file src="FishUI\MouseA.png" type="client" />
+	<file src="FishUI\MouseB.png" type="client" />
+	<file src="SkinShopUI\Back.png" type="client" />
+	<file src="SkinShopUI\ButtonBuy.png" type="client" />
+	<file src="SkinShopUI\ButtonExit.png" type="client" />
+	<file src="SkinShopUI\ButtonLeft.png" type="client" />
+	<file src="SkinShopUI\ButtonRight.png" type="client" />
+	<file src="SkinShopUI\DollarIcon.png" type="client" />
+	<file src="SkinShopUI\Fonts\8519.otf" type="client" />
+	<file src="CarBuyUI\Back.png" type="client" />
+	<file src="CarBuyUI\Fonts\bebas-neue-bold.ttf" type="client" />
+	<file src="CarBuyUI\DollarIcon.png" type="client" />
+	<file src="CarBuyUI\ButtonBuy.png" type="client" />
+	<file src="CarBuyUI\ButtonExit.png" type="client" />
+	<file src="CarBuyUI\ArrowUp.png" type="client" />
+	<file src="CarBuyUI\ArrowDown.png" type="client" />
+	<file src="CarBuyUI\CarColors\Black.png" type="client" />
+	<file src="CarBuyUI\CarColors\Blue.png" type="client" />
+	<file src="CarBuyUI\CarColors\Gray.png" type="client" />
+	<file src="CarBuyUI\CarColors\Yellow.png" type="client" />
+	<file src="CarBuyUI\CarColors\Red.png" type="client" />
+	<file src="CarBuyUI\CarColors\White.png" type="client" />
+	<file src="MenuUI\Settings\Back.png" type="client" />
+	<file src="MenuUI\Settings\Panel.png" type="client" />
+	<file src="MenuUI\Settings\Activated.png" type="client" />
+	<file src="MenuUI\Settings\Deactivated.png" type="client" />
+	<file src="MenuUI\Settings\Save.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\0p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\10p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\20p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\30p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\40p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\50p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\60p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\70p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\80p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\90p.png" type="client" />
+	<file src="MenuUI\Settings\Alpha\100p.png" type="client" />
+	<file src="MenuUI\Rules\Back.png" type="client" />
+	<file src="MenuUI\Commands\Main.png" type="client" />
+	<file src="MenuUI\Commands\Vehicle.png" type="client" />
+	<file src="MenuUI\Commands\Mafia.png" type="client" />
+	<file src="MenuUI\Commands\Leader.png" type="client" />
+	<file src="MenuUI\Commands\Faction4.png" type="client" />
+	<file src="MenuUI\Commands\Faction3.png" type="client" />
+	<file src="MenuUI\Commands\Faction2.png" type="client" />
+	<file src="MenuUI\Commands\Faction1.png" type="client" />
+	<file src="MenuUI\Commands\Chat.png" type="client" />
+	<file src="MenuUI\Commands\ArrowLeft.png" type="client" />
+	<file src="MenuUI\Commands\ArrowRight.png" type="client" />
+	<file src="MenuUI\Donate\Back.png" type="client" />
+	<file src="MenuUI\Donate\Balance\Back.png" type="client" />
+	<file src="MenuUI\Donate\Wallet\Mouse.png" type="client" />
+	<file src="MenuUI\Donate\Wallet\MouseHover.png" type="client" />
+	<file src="MenuUI\Donate\Name\Mouse.png" type="client" />
+	<file src="MenuUI\Donate\Name\MouseHover.png" type="client" />
+	<file src="MenuUI\Donate\Unwarn\Mouse.png" type="client" />
+	<file src="MenuUI\Donate\Unwarn\MouseHover.png" type="client" />
+	<file src="MenuUI\Donate\Unwarn\NoMouse.png" type="client" />
+	<file src="MenuUI\Donate\License\Drive.png" type="client" />
+	<file src="MenuUI\Donate\License\DriveHover.png" type="client" />
+	<file src="MenuUI\Donate\License\Fly.png" type="client" />
+	<file src="MenuUI\Donate\License\FlyHover.png" type="client" />
+	<file src="MenuUI\Donate\License\Weapon.png" type="client" />
+	<file src="MenuUI\Donate\License\WeaponHover.png" type="client" />
+	<file src="MenuUI\Donate\ArrowRight.png" type="client" />
+	<file src="MenuUI\Donate\ArrowLeft.png" type="client" />
+	<file src="MenuUI\Donate\Skills\Ak47.png" type="client" />
+	<file src="MenuUI\Donate\Skills\Deagle.png" type="client" />
+	<file src="MenuUI\Donate\Skills\Fish.png" type="client" />
+	<file src="MenuUI\Donate\Skills\M4.png" type="client" />
+	<file src="MenuUI\Donate\Skills\Shotgun.png" type="client" />
+	<file src="MenuUI\Donate\Skills\Ak47Hover.png" type="client" />
+	<file src="MenuUI\Donate\Skills\DeagleHover.png" type="client" />
+	<file src="MenuUI\Donate\Skills\FishHover.png" type="client" />
+	<file src="MenuUI\Donate\Skills\M4Hover.png" type="client" />
+	<file src="MenuUI\Donate\Skills\ShotgunHover.png" type="client" />
+	<file src="MenuUI\Donate\Sub\Advance.png" type="client" />
+	<file src="MenuUI\Donate\Sub\AdvanceHover.png" type="client" />
+	<file src="MenuUI\Donate\Sub\Back.png" type="client" />
+	<file src="MenuUI\Donate\Sub\Basic.png" type="client" />
+	<file src="MenuUI\Donate\Sub\BasicHover.png" type="client" />
+	<file src="MenuUI\Donate\Sub\Extended.png" type="client" />
+	<file src="MenuUI\Donate\Sub\ExtendedHover.png" type="client" />
+	<file src="MenuUI\Donate\Sub\Premium.png" type="client" />
+	<file src="MenuUI\Donate\Sub\PremiumHover.png" type="client" />
+	<file src="MenuUI\Donate\Promo\Back.png" type="client" />
+	<file src="MenuUI\Donate\Promo\Accept.png" type="client" />
+	<file src="MenuUI\Donate\Promo\Window.png" type="client" />
+	<file src="CaptureUI\Back.png" type="client" />
+	<file src="CaptureUI\Beach.png" type="client" />
+	<file src="CaptureUI\BeachN.png" type="client" />
+	<file src="CaptureUI\Cinema.png" type="client" />
+	<file src="CaptureUI\CinemaN.png" type="client" />
+	<file src="CaptureUI\Start.png" type="client" />
+	<file src="CaptureUI\Trash.png" type="client" />
+	<file src="CaptureUI\TrashN.png" type="client" />
+	<file src="CaptureUI\Fonts\Roboto-Medium.ttf" type="client" />
+	<file src="CaptureUI\Fonts\Roboto-BoldItalic.ttf" type="client" />
+	<file src="BankUI\IN.png" type="client" />
+	<file src="BankUI\Nalog0.png" type="client" />
+	<file src="BankUI\Nalog1.png" type="client" />
+	<file src="BankUI\Nalog2.png" type="client" />
+	<file src="BankUI\Nalog3.png" type="client" />
+	<file src="BankUI\NalogAZS.png" type="client" />
+	<file src="BankUI\NalogBIZ.png" type="client" />
+	<file src="BankUI\NalogDOM.png" type="client" />
+	<file src="BankUI\OUT.png" type="client" />
+	<file src="BankUI\OutMoney.png" type="client" />
+	<file src="BankUI\Phone.png" type="client" />
+	<file src="BankUI\RIGHT.png" type="client" />
+	<file src="BankUI\TopUp.png" type="client" />
+	<file src="BankUI\Trans.png" type="client" />
+	<file src="BankUI\Fonts\Roboto-Bold.ttf" type="client" />
+	<file src="Regaru\ButtonChoose.png" type="client" />
+	<file src="Regaru\ButtonLeft.png" type="client" />
+	<file src="Regaru\ButtonRight.png" type="client" />
+	<file src="Regaru\Choose.png" type="client" />
+	<file src="Regaru\Race.png" type="client" />
+	<export function="showPlayerDialog" type="server"/>
+	<export function="getAllPlayers" type="server"/>
+	<export function="sendBebas" type="client"/>
+	<export function="addBox" type="server"/>
+	<export function="addBox" type="client"/>
+	<export function="create3dtextlabel" type="server"/>
+	<export function="edit3dtext" type="server"/>
+	<export function="sendPrice" type="client"/>
+	<export function="attach3dtexttoplayer" type="server"/>
+	<export function="createVeh" type="server"/>
+	<export function="setElementMoney" type="server"/>
+	<export function="customSpawnVehicle" type="server"/>
+	<export function="getCoefMoney" type="server"/>
+	<export function="setLicFu" type="server"/>
+	<export function="getGruzState" type="server"/>
+	<export function="setGruzState" type="server"/>
+	<export function="getDataBase" type="server"/>
+	<export function="SEP" type="server"/>
+	<export function="SIDP" type="server"/>
+	<export function="SET" type="server"/>
+</meta>

@@ -1,0 +1,15 @@
+Правый верхний угол:
+Баланс: Roboto Bold 18px (696969)
+Сумма: $15 000.00 Roboto Bold 18px (000000)
+
+Владелец счета: Roboto Bold 18px (696969)
+Ник: Octaviano Velasco Roboto Bold 18px (000000)
+
+Внутри где имя, коммисия сумма и тд
+Roboto Bold 16px фулл черный
+
+*заполните все поля (909090) Roboto Bold 14px
+
+*Успешный перевод! (2dbe3c) Roboto Bold 14px
+
+*Недостаточно финансов (be2d2d) Roboto Bold 14px

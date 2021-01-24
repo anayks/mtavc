@@ -1,0 +1,14 @@
+Цвета:
+- белый ffffff
+- фиолетовый b592ef
+- когда что-то ОТСУТСВУЕТ цвет: ababab
+
+Моя организация: 
+ранг цвет рядом с иконкой: 7851b8
+
+
+Толщина шрифтов:
+Выбранный пунтк в меню: http://prntscr.com/nbg7mv   - Averta CY Regular
+НЕ выбранные пунткы в меню: http://prntscr.com/nbg7u2    - Averta CY Light
+В статистике, уровне персонажа, моя организация: http://prntscr.com/nbg8bj 	- Averta CY Semibold
+Ник-нейм под автаркой: http://prntscr.com/nbg8ea	- Averta CY Bold
