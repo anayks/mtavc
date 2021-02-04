@@ -7,8 +7,14 @@
   <script src="server/ATM/index.lua" type="server"/>
   <export function="getATM" type="server"/>
 
+  <script src="server/business/fuelStation.lua" server="server"/>
+  <export function="getFuelStations" type="server"/>
+  <script src="server/business/list.lua" type="server"/>
+  <export function="getBusinessList" type="server"/>
   <script src="server/business/gas.lua" type="server"/>
   <export function="getGasStations" type="server"/>
+  <script src="server/business/paints.lua" type="server"/>
+  <export function="getBusinessPaints" type="server"/>
 
   <script src="server/casino/tables.lua" type="server"/>
   <export function="getCasinoTables" type="server"/>
@@ -19,6 +25,18 @@
   <export function="getDBLogin" type="server"/>
   <export function="getDBPass" type="server"/>
 
+  <script src="server/factions/names.lua" type="server"/>
+  <export function="getFactionsNames" type="server"/>
+  <script src="server/factions/rankNames.lua" type="server"/>
+  <export function="getFactionsRankNames" type="server"/>
+  <script src="server/factions/salary.lua" type="server"/>
+  <export function="getFactionsSalary" type="server"/>
+  <script src="server/factions/skins.lua" type="server"/>
+  <export function="getFactionsSkins" type="server"/>
+
+  <script src="server/greenZones" type="server"/>
+  <export function="getGreenZones" type="server"/>
+
   <script src="server/jobs/bus.lua" type="server"/>
   <export function="getBusMarkers" type="server"/>
 
@@ -28,21 +46,24 @@
   <script src="server/skins/index.lua" type="server"/>
   <export function="getSkinsList" type="server"/>
 
+  <script src="server/spawns/factions.lua" type="server"/>
+  <export function="getFactionsSpawns" type="server"/>
+
+  <script src="server/spawns/index.lua" type="server"/>
+  <export function="getSpawnList" type="server"/>
+
+  <script src="server/vehicles/dealer.lua" type="server"/>
+  <export function="getDealersCars" type="server"/>
   <script src="server/vehicles/GPSRent.lua" type="server"/>
   <export function="getGPSPositions" type="server"/>
-
   <script src="server/vehicles/IDs.lua" type="server"/>
   <export function="getVehiclesIDs" type="server"/>
-
   <script src="server/vehicles/mechCars.lua" type="server"/>
   <export function="getMechanicCars" type="server"/>
-
   <script src="server/vehicles/mechSpawn.lua" type="server"/>
   <export function="getMechanicsVehicles" type="server"/>
-
   <script src="server/vehicles/rent.lua" type="server"/>
   <export function="getRentVehicles" type="server"/>
-
   <script src="server/vehicles/rentPos.lua" type="server"/>
   <export function="getRandomRentPos" type="server"/>
 
