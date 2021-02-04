@@ -1,0 +1,49 @@
+<meta>
+  <info author="Lemn" type="gamemode" name="MTAVC" description="MTA VC"/>
+  
+  <script src="server/anims/index.lua" type="server"/>
+  <export function="getAnimList" type="server"/>
+
+  <script src="server/ATM/index.lua" type="server"/>
+  <export function="getATM" type="server"/>
+
+  <script src="server/business/gas.lua" type="server"/>
+  <export function="getGasStations" type="server"/>
+
+  <script src="server/casino/tables.lua" type="server"/>
+  <export function="getCasinoTables" type="server"/>
+
+  <script src="server/db.lua" type="server"/>
+  <export function="getDBType" type="server"/>
+  <export function="getDBData" type="server"/>
+  <export function="getDBLogin" type="server"/>
+  <export function="getDBPass" type="server"/>
+
+  <script src="server/jobs/bus.lua" type="server"/>
+  <export function="getBusMarkers" type="server"/>
+
+  <script src="server/repair/index.lua" type="server"/>
+  <export function="getRepairStations" type="server"/>
+
+  <script src="server/skins/index.lua" type="server"/>
+  <export function="getSkinsList" type="server"/>
+
+  <script src="server/vehicles/GPSRent.lua" type="server"/>
+  <export function="getGPSPositions" type="server"/>
+
+  <script src="server/vehicles/IDs.lua" type="server"/>
+  <export function="getVehiclesIDs" type="server"/>
+
+  <script src="server/vehicles/mechCars.lua" type="server"/>
+  <export function="getMechanicCars" type="server"/>
+
+  <script src="server/vehicles/mechSpawn.lua" type="server"/>
+  <export function="getMechanicsVehicles" type="server"/>
+
+  <script src="server/vehicles/rent.lua" type="server"/>
+  <export function="getRentVehicles" type="server"/>
+
+  <script src="server/vehicles/rentPos.lua" type="server"/>
+  <export function="getRandomRentPos" type="server"/>
+
+</meta>

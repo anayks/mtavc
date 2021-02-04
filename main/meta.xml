@@ -221,4 +221,5 @@
 	<export function="SEP" type="server"/>
 	<export function="SIDP" type="server"/>
 	<export function="SET" type="server"/>
+  <export function="getGPSPositions" type="server"/>
 </meta>
