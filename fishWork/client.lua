@@ -60,8 +60,8 @@ function onClientRender(  )
 end
 
 function onClientResourceStart( arg1 )
-	if(getResourceName(arg1) == "moyserver") then
-		shrift = exports.moyserver:sendBebas()
+	if(getResourceName(arg1) == "main") then
+		shrift = exports.main:sendBebas()
 		addEventHandler("onClientRender", root, onClientRender)
 	end
 end

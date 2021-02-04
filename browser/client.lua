@@ -192,7 +192,7 @@ function tryFalseResponse(  )
 end
 
 function addBox( text, r, g, b )
-	exports.moyserver:addBox(text, r, g, b)
+	exports.main:addBox(text, r, g, b)
 end
 
 addEvent("tryFalseResponse", true)

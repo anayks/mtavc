@@ -16,11 +16,11 @@ local freeEatTable =
 }
 
 function addBox( text, player, r, g, b )
-	exports.moyserver:addBox(text, player, r, g, b)
+	exports.main:addBox(text, player, r, g, b)
 end
 
 function create3dtextlabel( x, y, z, text )
-	exports.moyserver:create3dtextlabel(x, y, z, text, getThisResource())
+	exports.main:create3dtextlabel(x, y, z, text, getThisResource())
 end
 
 function UpdateFood( thePlayer )
@@ -28,7 +28,7 @@ function UpdateFood( thePlayer )
 end
 
 function showPlayerDialog( thePlayer, id, type, name, text, ok, nota )
-	exports.moyserver:showPlayerDialog(thePlayer, id, type, name, text, ok, nota)
+	exports.main:showPlayerDialog(thePlayer, id, type, name, text, ok, nota)
 end
 
 function createFreeEat(  )

@@ -1,5 +1,5 @@
 function create3dtextlabel( x, y, z, text)
-	return exports.moyserver:create3dtextlabel(x, y, z, text, getThisResource())
+	return exports.main:create3dtextlabel(x, y, z, text, getThisResource())
 end
 
 local pckEnter = createPickup(-731.22265625, 1262.74609375, 11.730819702148, 3, 1318, 0)
@@ -13,19 +13,19 @@ setElementInterior(pckExit, 2)
 local ZavodSkl = 0
 
 function edit3dtext( id, text )
-	exports.moyserver:edit3dtext(id, text)
+	exports.main:edit3dtext(id, text)
 end
 
 function showPlayerDialog( thePlayer, id, type, t1, t2, t3, t4 )
-	exports.moyserver:showPlayerDialog(thePlayer, id, type, t1, t2, t3, t4)
+	exports.main:showPlayerDialog(thePlayer, id, type, t1, t2, t3, t4)
 end
 
 function addBox( text, thePlayer, r, g, b )
-	exports.moyserver:addBox(text, thePlayer, r, g, b)
+	exports.main:addBox(text, thePlayer, r, g, b)
 end
 
 function setElementMoney( thePlayer, money, reason )
-	exports.moyserver:setElementMoney(thePlayer, money, reason)
+	exports.main:setElementMoney(thePlayer, money, reason)
 end
 
 local secStols = 
@@ -42,7 +42,7 @@ local secStols =
 	[10] = {	["x"]=	2558.615234375,	["y"]=-1296.244140625,	["z"]=1044.1262207031,	["State"] = 0	}
 }
 
-local mysql = exports.moyserver:getDataBase()
+local mysql = exports.main:getDataBase()
 
 function getDBProxy(func) 
   if(mysql ~= false) then

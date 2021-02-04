@@ -1,5 +1,5 @@
 function addBox( t, p, r, g, b )
-	exports.moyserver:addBox(t, p, r, g, b)
+	exports.main:addBox(t, p, r, g, b)
 end
 
 function ruchnik( thePlayer )

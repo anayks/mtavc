@@ -11,20 +11,20 @@ local coordLoaderCar = {
 }
 
 for i,n in pairs(coordLoaderCar) do
-	local veh = exports.moyserver:createVeh(530, n["x"], n["y"], n["z"], 0, 0, n["rz"])
+	local veh = exports.main:createVeh(530, n["x"], n["y"], n["z"], 0, 0, n["rz"])
 	setElementData(veh, "loaderCar", true)
 end
 
 function showPlayerDialog( thePlayer, id, type, t1, t2, t3, t4 )
-	exports.moyserver:showPlayerDialog(thePlayer, id, type, t1, t2, t3, t4)
+	exports.main:showPlayerDialog(thePlayer, id, type, t1, t2, t3, t4)
 end
 
 function create3dtextlabel( x, y, z, text )
-	exports.moyserver:create3dtextlabel(x, y, z, text)
+	exports.main:create3dtextlabel(x, y, z, text)
 end
 
 function addBox( text, thePlayer, r, g, b )
-	exports.moyserver:addBox(text, thePlayer, r, g, b)
+	exports.main:addBox(text, thePlayer, r, g, b)
 end
 
 function onPickupHit( pck )
@@ -51,9 +51,9 @@ function onSecondLoaderCar( hit, dim )
 					removeElementData(hit, "blpSecLoaderCar")
 					removeElementData(hit, "objSecLoaderCar")
 					local sum = getElementData(hit, "sumSecLoaderCar")
-					sum = tonumber(sum) * exports.moyserver:getCoefMoney()
+					sum = tonumber(sum) * exports.main:getCoefMoney()
 					removeElementData(hit, "sumSecLoaderCar")
-					exports.moyserver:setElementMoney(hit, sum, "Кар доставка")
+					exports.main:setElementMoney(hit, sum, "Кар доставка")
 					addBox("Вы успешно доставили груз\nИ заработали " .. sum .. "$.", hit, 0, 255, 60)
 					local mrk = createMarker(-679.5224609375, -1357.49609375, 11.029188156128, "checkpoint", 3.2, 220, 0, 0, 220, hit)
 					local blp = createBlip(-679.5224609375, -1357.49609375, 11.029188156128, 0, 2.4, 220, 0, 0, 220, 5, 64000, hit)
@@ -68,7 +68,7 @@ function onSecondLoaderCar( hit, dim )
 end
 
 function customSpawnVehicle( veh )
-	exports.moyserver:customSpawnVehicle(veh)
+	exports.main:customSpawnVehicle(veh)
 end
 
 function clearLoaderCar( thePlayer )
@@ -116,9 +116,9 @@ function onFirstLoaderCar( hit, dim )
 			local veh = getPedOccupiedVehicle(hit)
 			if(veh ~= false) then
 				if(veh == getElementData(hit, "loaderCar")) then
-					local tablo = exports.moyserver:getGruzState()
+					local tablo = exports.main:getGruzState()
 					if(tablo >= 10) then
-						exports.moyserver:setGruzState(tablo - 10)
+						exports.main:setGruzState(tablo - 10)
 						local mrk = getElementData(hit, "mrkFirstLoaderCar")
 						local blp = getElementData(hit, "blpFirstLoaderCar")
 						destroyElement(mrk)
